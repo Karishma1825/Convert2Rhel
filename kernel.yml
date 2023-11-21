@@ -1,0 +1,13 @@
+---
+- name: resolve kernel issue
+  hosts: Linux_CentOStest
+  tasks:
+    - name: remove pata_acpi module
+      command: rmmod pata_acpi
+      ignore_errors: yes
+
+    - name: confirm removal of pam_pkcs11 module
+      lineinfile:
+        path: /var/log/leapp/answerfile
+        line:  confirm = True
+
