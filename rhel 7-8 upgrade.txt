@@ -1,0 +1,46 @@
+Pre
+sRHEL 7 TO 8 UPGRADATION
+
+PRE-REQUISITES:
+•	Leapp upgrade supports only RHEL 7.9, so upgrade your system if you are running any other minor versions of RHEL 7.x.
+•	/Var partition need more space as leapp dumps all files under the directory ‘/var/lib/leapp’, so recommend to create a separate filesystem with 10GB.
+•	/ Partition should have at-least 4-5 GB of free space.
+•	/tmp should be mounted with ‘exec’ permission.
+•	Enable ‘rhel-7-server-extras-rpms’ in order to install Leapp utility.
+•	Backup the system, which required for roll back.
+•	Downtime – The upgrade process can take several hours 2-3 hours, including Roll Back plan.
+•	Check version computability for third party software like Antivirus, temporarily disable Antivirus software to prevent the upgrade from failing.
+
+UPGRADATION:
+
+*Enable the required repository.
+#subscription-manager register
+# subscription-manager list --installed
+# subscription-manager attach --auto
+# subscription-manager repos --enable rhel-7-server-rpms --enable rhel-7-server-extras-rpms
+# subscription-manager release –unset
+# yum versionlock clear
+# yum install leap
+
+
+*Check if /tmp is mounted with exec option. If not, remount it.
+#mount -o remount,exec /tmp
+
+*Running the pre-upgrade and upgrade
+#leapp preupgrade --target 
+
+*Resolve the issues occurred in report.  
+*Possible issues which occurs.
+# leapp answer --section remove_pam_pkcs11_module_check.confirm=True
+# rmmod pata_acpi
+PermitRootLogin no in /etc/ssh/sshd_config
+
+#leapp upgrade --target 8.6
+#reboot
+
+
+POST UPGRADATION:
+
+Remove the rhel 7 kernels and other installed packages/modules.
+
+
